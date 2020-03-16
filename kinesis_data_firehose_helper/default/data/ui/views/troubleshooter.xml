@@ -18,7 +18,7 @@
   </fieldset>
   <row>
     <panel>
-      <title>Health Check URL</title>
+      <title>Non-ACK HEC URL Tests</title>
       <table>
         <title>Normal HEC URL</title>
         <search>
@@ -40,6 +40,9 @@
         </search>
         <option name="drilldown">none</option>
       </table>
+    </panel>
+    <panel>
+      <title>Firehose HEC URL Tests</title>
       <table>
         <title>Firehose HEC URL</title>
         <search>
@@ -51,7 +54,7 @@
         </drilldown>
       </table>
       <table>
-        <title>Nslookup Firehose</title>
+        <title>Nslookup Firehose **If no IP's listed, then you need to request a firehose ELB created from support.**</title>
         <search>
           <query>|makeresults | eval clienthost="http-inputs-firehose-$stack$.splunkcloud.com" | lookup dnslookup clienthost OUTPUT clientip</query>
           <earliest>-24h@h</earliest>
@@ -59,19 +62,6 @@
         </search>
         <option name="drilldown">none</option>
       </table>
-    </panel>
-  </row>
-  <row>
-    <panel>
-      <single>
-        <title>Notes</title>
-        <search>
-          <query>|makeresults | eval notes="If no IP's listed, then you need to request a firehose ELB created from support." | table notes</query>
-          <earliest>-24h@h</earliest>
-          <latest>now</latest>
-        </search>
-        <option name="drilldown">none</option>
-      </single>
     </panel>
   </row>
   <row>
@@ -89,8 +79,6 @@
         <option name="refresh.display">progressbar</option>
       </table>
     </panel>
-  </row>
-  <row>
     <panel>
       <table>
         <title>Firehose HEC</title>
