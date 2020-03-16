@@ -1,0 +1,109 @@
+<form>
+  <label>Troubleshooter</label>
+  <fieldset submitButton="true" autoRun="true">
+    <input type="text" token="stack" searchWhenChanged="false">
+      <label>Stack ID</label>
+    </input>
+    <input type="text" token="token" searchWhenChanged="false">
+      <label>HEC Token</label>
+    </input>
+    <input type="text" token="sourcetype" searchWhenChanged="false">
+      <label>sourcetype</label>
+    </input>
+    <input type="text" token="event" searchWhenChanged="false">
+      <label>event</label>
+      <initialValue>Hello World</initialValue>
+      <default>Hello World</default>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <title>Health Check URL</title>
+      <table>
+        <title>Normal HEC URL</title>
+        <search>
+          <query>| makeresults | eval hec_url = "https://http-inputs-$stack$.splunkcloud.com/services/collector/health/1.0" | table hec_url </query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="drilldown">cell</option>
+        <drilldown>
+          <link target="_blank">https://http-inputs-$stack$.splunkcloud.com/services/collector/health/1.0</link>
+        </drilldown>
+      </table>
+      <table>
+        <title>Nslookup Hosts</title>
+        <search>
+          <query>|makeresults | eval clienthost="http-inputs-$stack$.splunkcloud.com" | lookup dnslookup clienthost OUTPUT clientip</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="drilldown">none</option>
+      </table>
+      <table>
+        <title>Firehose HEC URL</title>
+        <search>
+          <query>| makeresults | eval firehose_url = "https://http-inputs-firehose-$stack$.splunkcloud.com/services/collector/health/1.0" | table firehose_url</query>
+        </search>
+        <option name="drilldown">cell</option>
+        <drilldown>
+          <link target="_blank">https://http-inputs-$stack$.splunkcloud.com/services/collector/health/1.0</link>
+        </drilldown>
+      </table>
+      <table>
+        <title>Nslookup Firehose</title>
+        <search>
+          <query>|makeresults | eval clienthost="http-inputs-firehose-$stack$.splunkcloud.com" | lookup dnslookup clienthost OUTPUT clientip</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="drilldown">none</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <single>
+        <title>Notes</title>
+        <search>
+          <query>|makeresults | eval notes="If no IP's listed, then you need to request a firehose ELB created from support." | table notes</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="drilldown">none</option>
+      </single>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>cURL Test HEC</title>
+        <search>
+          <query>|makeresults 
+| eval "Copy and run this command" = "curl -k"." "." "."\""."https://http-inputs-$stack$.splunkcloud.com/services/collector"."\" "."-H"." "."\""."Authorization: Splunk $token$"."\""." "."-d".""." "."'"."{".""."\""."event"."\"".":"." "."\""."$event$"."\"".","."\""."sourcetype"."\"".":"." "."\""."$sourcetype$"."\""."}"."'"
+| table "Copy and run this command"</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>Firehose HEC</title>
+        <search>
+          <query>|makeresults 
+| eval "Copy and run this command" = "curl -k"." "." "."\""."https://http-inputs-firehose-$stack$.splunkcloud.com/services/collector?channel=00872DC6-AC83-4EDE-8AFE-8413C3825C4C"."\" "."-H"." "."\""."Authorization: Splunk $token$"."\""." "."-d".""." "."'"."{".""."\""."event"."\"".":"." "."\""."$event$"."\"".","."\""."sourcetype"."\"".":"." "."\""."$sourcetype$"."\""."}"."'"
+| table "Copy and run this command"</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+</form>
