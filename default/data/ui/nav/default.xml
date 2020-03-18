@@ -1,0 +1,6 @@
+<nav search_view="search">
+  <view name="troubleshooter"  />
+  <view name="splunk_byol_troubleshooter" />
+  <view name="search" default='true' />
+  <view name="dashboards" />
+</nav>
